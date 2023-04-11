@@ -11,7 +11,7 @@ import com.badlogic.gdx.utils.ScreenUtils;
 
 public class SpriteAnimation extends ApplicationAdapter {
 	// Constant rows and columns of the sprite sheet
-	private static final int FRAME_COLS = 6, FRAME_ROWS = 5;
+	private static final int FRAME_COLS = 8, FRAME_ROWS = 2;
 
 	// Objects used
 	Animation<TextureRegion> walkAnimation; // Must declare frame type (TextureRegion)
@@ -25,7 +25,7 @@ public class SpriteAnimation extends ApplicationAdapter {
 	public void create() {
 
 		// Load the sprite sheet as a Texture
-		walkSheet = new Texture(Gdx.files.internal("animation_sheet.png"));
+		walkSheet = new Texture(Gdx.files.internal("scottpilgrim.png"));
 
 		// Use the split utility method to create a 2D array of TextureRegions. This is
 		// possible because this sprite sheet contains frames of equal size and they are
@@ -45,7 +45,7 @@ public class SpriteAnimation extends ApplicationAdapter {
 		}
 
 		// Initialize the Animation with the frame interval and array of frames
-		walkAnimation = new Animation<TextureRegion>(0.025f, walkFrames);
+		walkAnimation = new Animation<TextureRegion>(0.075f, walkFrames);
 
 		// Instantiate a SpriteBatch for drawing and reset the elapsed animation
 		// time to 0
