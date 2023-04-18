@@ -92,7 +92,7 @@ public class SpriteAnimation extends ApplicationAdapter {
 		// Get current frame of animation for the current stateTime
 		int dir=virtual_joystick_control();
 		if(dir==4){
-			posX=posX+1;
+			posX=posX+3;
 			currentFrame = walkRightAnimation.getKeyFrame(stateTime, true);
 			spriteBatch.begin();
 			spriteBatch.draw(currentFrame, posX, posY,450,450);
@@ -100,12 +100,24 @@ public class SpriteAnimation extends ApplicationAdapter {
 
 		}
 		else if(dir==3){
-			posX=posX-1;
+			posX=posX-3;
 			currentFrame = walkLeftAnimation.getKeyFrame(stateTime, true);
 			spriteBatch.begin();
 			spriteBatch.draw(currentFrame, posX, posY,450,450);
 			spriteBatch.end();
 
+		}
+		else if(dir==2){
+			currentFrame = walkRightAnimation.getKeyFrame(stateTime, true);
+			spriteBatch.begin();
+			spriteBatch.draw(currentFrame, posX, posY,450,450);
+			spriteBatch.end();
+		}
+		else if(dir==1){
+			currentFrame = walkLeftAnimation.getKeyFrame(stateTime, true);
+			spriteBatch.begin();
+			spriteBatch.draw(currentFrame, posX, posY,450,450);
+			spriteBatch.end();
 		}
 		else{
 			spriteBatch.begin();
@@ -130,10 +142,10 @@ public class SpriteAnimation extends ApplicationAdapter {
 				// traducció de coordenades reals (depen del dispositiu) a 800x480
 				camera.unproject(touchPos);
 				if (up.contains(touchPos.x, touchPos.y)) {
-					posY=posY+1;
+					posY=posY+3;
 					return UP;
 				} else if (down.contains(touchPos.x, touchPos.y)) {
-					posY=posY-1;
+					posY=posY-3;
 					return DOWN;
 				} else if (left.contains(touchPos.x, touchPos.y)) {
 					return LEFT;
