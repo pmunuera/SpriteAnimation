@@ -6,6 +6,7 @@ import static com.badlogic.gdx.Input.Keys.RIGHT;
 import static com.badlogic.gdx.Input.Keys.UP;
 
 
+import com.badlogic.gdx.Application;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
@@ -17,8 +18,14 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.ScreenUtils;
+import com.github.czyzby.websocket.WebSocket;
+import com.github.czyzby.websocket.WebSocketListener;
+import com.github.czyzby.websocket.WebSockets;
 
 public class SpriteAnimation extends ApplicationAdapter {
+	WebSocket socket;
+	String address = "localhost";
+	int port = 8888;
 	// Constant rows and columns of the sprite sheet
 	private static final int FRAME_COLS = 8, FRAME_ROWS = 1;
 	Rectangle up, down, left, right, fire;
@@ -34,9 +41,18 @@ public class SpriteAnimation extends ApplicationAdapter {
 	float posX,posY;
 	// A variable for tracking elapsed time for the animation
 	float stateTime;
+	float lastSend=0.0f;
 
 	@Override
 	public void create() {
+		if( Gdx.app.getType()== Application.ApplicationType.Android )
+			// en Android el host és accessible per 10.0.2.2
+			address = "10.0.2.2";
+		socket = WebSockets.newSocket(WebSockets.toWebSocketUrl(address, port));
+		socket.setSendGracefully(false);
+		socket.addListener((WebSocketListener) new MyWSListener());
+		socket.connect();
+		socket.send("Enviar dades");
 		up = new Rectangle(0, 480*2/3, 800, 480/3);
 		down = new Rectangle(0, 0, 800, 480/3);
 		left = new Rectangle(0, 0, 800/3, 480);
@@ -86,6 +102,10 @@ public class SpriteAnimation extends ApplicationAdapter {
 
 	@Override
 	public void render() {
+		if( stateTime-lastSend > 1.0f ) {
+			lastSend = stateTime;
+			socket.send("Enviar dades");
+		}
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT); // Clear screen
 		stateTime += Gdx.graphics.getDeltaTime(); // Accumulate elapsed animation time
 
@@ -154,5 +174,37 @@ public class SpriteAnimation extends ApplicationAdapter {
 				}
 			}
 		return IDLE;
+	}
+}
+class MyWSListener implements WebSocketListener {
+
+	@Override
+	public boolean onOpen(WebSocket webSocket) {
+		System.out.println("Opening...");
+		return false;
+	}
+
+	@Override
+	public boolean onClose(WebSocket webSocket, int closeCode, String reason) {
+		System.out.println("Closing...");
+		return false;
+	}
+
+	@Override
+	public boolean onMessage(WebSocket webSocket, String packet) {
+		System.out.println("Message:");
+		return false;
+	}
+
+	@Override
+	public boolean onMessage(WebSocket webSocket, byte[] packet) {
+		System.out.println("Message:");
+		return false;
+	}
+
+	@Override
+	public boolean onError(WebSocket webSocket, Throwable error) {
+		System.out.println("ERROR:"+error.toString());
+		return false;
 	}
 }

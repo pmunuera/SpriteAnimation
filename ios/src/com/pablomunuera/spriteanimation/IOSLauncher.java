@@ -5,12 +5,14 @@ import org.robovm.apple.uikit.UIApplication;
 
 import com.badlogic.gdx.backends.iosrobovm.IOSApplication;
 import com.badlogic.gdx.backends.iosrobovm.IOSApplicationConfiguration;
+import com.github.czyzby.websocket.CommonWebSockets;
 import com.pablomunuera.spriteanimation.SpriteAnimation;
 
 public class IOSLauncher extends IOSApplication.Delegate {
     @Override
     protected IOSApplication createApplication() {
         IOSApplicationConfiguration config = new IOSApplicationConfiguration();
+        CommonWebSockets.initiate();
         return new IOSApplication(new SpriteAnimation(), config);
     }
 
